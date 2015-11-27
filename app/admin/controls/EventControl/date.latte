@@ -1,0 +1,11 @@
+<div class="panel panel-default">
+	<div class="panel-heading text-center">
+		<span class="glyphicon glyphicon-calendar pull-left"></span>
+		<a class="ajax label label-primary pull-right" n:href="dateEdit!">Edit</a>
+		<h3>{$_event->start|date:"Y"}</h3>
+	</div>
+	<div class="panel-body text-center">
+		<h2 class="text-nowrap">{$_event->start|date:"j. n."}</h2>
+		<h4>{$_event->start|date:"H:i"}</h4>
+	</div>
+</div>

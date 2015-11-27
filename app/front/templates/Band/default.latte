@@ -1,0 +1,66 @@
+{define #content}
+<h1>Kapela</h1>
+
+<p>
+Kapela <span class="tm">Concrete Ostrich</span> byla založena 23. 3. 2012 ({round((time()-strtotime("2012-03-23"))/(60*60*24))} dní zpátky).
+Za zakladatele je považován Leopold Lukáš, který na začátku sjednotil partu několika svých kamarádů pod záminkou vytvoření
+minibandu, který by hrál volně na zábavách a plesech. První týdny ve zkušebně bývaly trpké, kapela postrádala bicí soupravu a cesty do zkušebny bývaly
+ponuré a dlouhé. V průběhu následujících měsíců se bandík doplnil o další členy a to už bylo jasné, že hraní na zábavách a plesech naše krky nenaplní.
+Možná za to může i Leova zvrhlost ve skládání, poněvadž z původních tanečních rytmů přešel chtě-nechtě do funk-jazzových radovánek.
+</p>
+
+<p>
+V té době se kapela ještě nejmenovala Concrete Ostrich. Prošli jsme si zdlouhavým vybíráním názvů, například "Imaginární štěpán" - narážka na smyšleného člena kapely, "Boule rády band" - pomocí translatoru přeložený název "Hořící kedluben" do dnes již neznámého jazyka, protože to znělo hustě. Taktéž se s mírou nadsázky spekulovalo o názvu "Pastorek", inspirovaným naučným plakátem ve zkušebně. Concrete Ostrich přišlo znenadání a většina kapely ani nevěděla odkud. V zápětí přišly na světlo světa nálepky s podobiznou pštrosa.
+</p>
+
+<p>
+Od března 2012 zkoušela kapela ve zkušebně v Hostivaři, pro valnou část členů je tato lokalita velmi vzdálená, tak se začalo jednat o zkušebně v bývalém bunkru v Hloubětíně. Bunkr se nám podařilo získat a po tvrdé práci na zvelebení plesnivých a špinavých prostor, jsme si mohli vychutnat pocit vlastní zkušebny. Bohužel nedohodli jsme se s původním majitelem úplně a kvůli neshodám jsme se museli bunkru vzdát. Nastalo období komerčních zkušeben a placení od hodiny.
+Spása přišla v podobě prostoru u Kavalírky, ve velkém firemním areálu, kde zkoušíme dodnes.
+</p>
+
+<h4>Složení</h4>
+<p>
+Kapela/Miniband Concrete Ostrich se skládá z následujích nástrojů/umělců:
+</p>
+<ul>
+	<li>Trumpeta</li>
+	<li>Alt. saxofon</li>
+	<li>Tenor saxofon</li>
+	<li>Basklarinet (Takovej ten černej saxofon)</li>
+	<li>Trombon</li>
+	<li>Basa</li>
+	<li>Klávesy</li>
+	<li>Bicí</li>
+	<li>Kytara</li>
+	<li>Zpěv</li>
+</ul>
+
+<p>
+Někteří členové jsou studenti konzervatoře Jaroslava Ježka v Praze, mnozí z nás jsou vysokoškolští studenti nebo pracující mládež, která se věnuje hudbě pouze koníčkem.
+</p>
+
+
+<h4>Členové</h4>
+
+	{foreach $descriptions as $musician}
+	   	<ul class="list-unstyled">
+			<li><h3>{$musician->name} {$musician->surname}</h3></li>
+			<li class="col-md-12">
+				<div class="col-md-6">
+				{if $musician->photo}
+					<div class="img">
+						<img class="img-responsive img-rounded" src="{$basePath}/{$musician->photo->url}" />
+						<p>{$musician->name} {$musician->surname}</p>
+					</div>
+				{/if}
+				</div>
+				<div class="col-md-6">
+					{$musician->content}
+				</div>
+		    	<hr />
+			</li>
+		</ul>		
+	{/foreach}
+
+
+{/define}

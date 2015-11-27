@@ -1,0 +1,28 @@
+{define #content}
+<h1>Galerie</h1>
+
+{control gallery}
+
+{/define}
+
+
+{*
+ * layout template
+ *}
+
+
+{block #administration-links}
+	<li class="list-group-item">
+		<a n:href="upload" class="btn btn-danger">Upload</a>
+	</li>	
+	<li class="list-group-item">
+		<a n:href="default" class="btn btn-success">Všechny</a>
+	</li>
+	<li class="list-group-item">
+		<a n:href="gallery" class="btn btn-success">Galerie</a>
+	</li>
+	<li class="list-group-item">
+		<a n:href="galleryInsert" class="btn btn-success">Vložit novou galerii</a>
+	</li>	
+{/block}
+

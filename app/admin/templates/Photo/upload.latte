@@ -1,0 +1,53 @@
+{define #content}
+<h1>Galerie</h1>
+
+
+{control upload}
+
+{*
+{snippet files}
+<table role="presentation" class="table table-striped">
+<tbody class="">
+    <tr n:foreach="$files as $file">
+        <td><img src="{$basePath}/{$file->thumbnails[0]->url}?t={$file->updated->getTimestamp()}" style="width: 80px; height: 80px" /></td>
+        <td><a n:href="rotate! $file->id" class="ajax">Rotate 90</a></td>
+        <td><a href="{$basePath}/{$file -> url}">{$file -> content}</a></td>
+        <td><a n:href="delete! $file->id" class="ajax" data-confirm="Opravdu?">Delete</a></td>
+    </tr>
+</tbody>
+</table>
+{/snippet}
+*}
+
+{snippet files}
+{control editControl}
+{/snippet}
+
+{*
+{snippet paginator}
+{control paginator}
+{/snippet}
+*}
+
+{/define}
+
+
+{*
+ * layout template
+ *}
+
+
+{block #administration-links}
+	<li class="list-group-item">
+		<a n:href="upload" class="btn btn-danger">Upload</a>
+	</li>	
+	<li class="list-group-item">
+		<a n:href="default" class="btn btn-success">Všechny</a>
+	</li>
+	<li class="list-group-item">
+		<a n:href="gallery" class="btn btn-success">Galerie</a>
+	</li>
+	<li class="list-group-item">
+		<a n:href="galleryInsert" class="btn btn-success">Vložit novou galerii</a>
+	</li>	
+{/block}

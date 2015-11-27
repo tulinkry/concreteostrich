@@ -1,0 +1,46 @@
+{define #content}
+<h1>Seznam galerií</h1>
+
+	{snippet galleries}
+
+		{foreach $galleries as $gallery}
+			{control galleries-$gallery->id}
+			<hr />
+		{/foreach}
+		{*
+			<table class="table table-striped">
+			{foreach $galleries as $gallery}
+				<tr>
+					<td>{$gallery -> id}</td>
+					<td>{$gallery -> name}</td>
+				</tr>
+				<tr>
+					<td>
+						{input }
+			{/foreach}
+			</table>
+		*}
+	{/snippet}
+
+{/define}
+
+
+{*
+ * layout template
+ *}
+
+
+{block #administration-links}
+	<li class="list-group-item">
+		<a n:href="upload" class="btn btn-danger">Upload</a>
+	</li>	
+	<li class="list-group-item">
+		<a n:href="default" class="btn btn-success">Všechny</a>
+	</li>
+	<li class="list-group-item">
+		<a n:href="gallery" class="btn btn-success">Galerie</a>
+	</li>
+	<li class="list-group-item">
+		<a n:href="galleryInsert" class="btn btn-success">Vložit novou galerii</a>
+	</li>	
+{/block}

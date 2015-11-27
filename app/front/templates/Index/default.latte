@@ -1,0 +1,57 @@
+{define #content}
+
+	<h1>Úvod</h1>
+
+	<p>Kapela <span class="tm">Concrete Ostrich</span> byla založena 23. 3. 2012 ({round((time()-strtotime("2012-03-23"))/(60*60*24))} dní zpátky).
+Za zakladatele je považován Leopold Lukáš, který na začátku sjednotil partu několika svých kamarádů pod záminkou vytvoření
+minibandu, který by hrál volně na zábavách a plesech. První týdny ve zkušebně bývaly trpké, ...</p>
+
+	<p>Více se dozvíte <a n:href="Band:default">zde</a></p>
+
+	<h2>Aktuality</h2>
+
+	{snippet posts}
+		{foreach $posts as $post}
+			{control posts-$post->id}
+			<hr />
+		{/foreach}
+	{/snippet}
+
+
+	<div id="blueimp-gallery" class="blueimp-gallery">
+	    <div class="slides"></div>
+	    <h3 class="title"></h3>
+	    <a class="prev">‹</a>
+	    <a class="next">›</a>
+	    <a class="close">×</a>
+	    <a class="play-pause"></a>
+	    <ol class="indicator"></ol>
+	</div>
+
+	<script>
+	$(window).load(function (){
+		$(".links").click (function (event)
+			{
+			    event = event || window.event;
+			    var target = event.target || event.srcElement;
+			    var link = target.src ? target.parentNode.parentNode : target
+			    var options = { index: link, 
+			    				event: event, 
+			    				titleElement: 'p', 
+			    				slideContentClass: 'slide-content img-rounded', 
+			    				preloadRange: 4, 
+			    				transitionSpeed: 700,
+			    				hidePageScrollbars: false }
+			    var links = this.getElementsByTagName('a');
+				blueimp.Gallery(links, options).toggleControls();
+
+			}
+		);
+	});
+	</script>
+
+	{snippet paginator}
+	{control paginator}
+	{/snippet}
+
+{/define}

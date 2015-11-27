@@ -1,0 +1,13 @@
+{layout "../../front/templates/@layout.latte"}
+
+{block #administration}
+	{include #parent}
+	<h3>Akce administrace</h3>
+	<ul class="list-group">
+		{block #administration-links}
+		{/block}
+		<li class="list-group-item">
+			<a n:href="logout!" class="btn btn-success">Odhlásit</a>
+		</li>
+	</ul>	
+{/block}

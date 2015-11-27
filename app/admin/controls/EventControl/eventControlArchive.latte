@@ -1,0 +1,127 @@
+{snippet}
+{ifset $event}
+	{var $success = $event->start->getTimestamp()>time() ? "success" : "danger"}
+
+   	<ul class="list-unstyled clearfix event">
+		<li class="">
+			<div class="panel panel-{$success}">
+				<div class="panel-heading col-md-12">
+					<div class="col-md-3 panel-date">
+						{include date.latte _event => $event}
+					</div>
+
+					<div class="col-md-8">
+						{if isset($name_edit) && $name_edit == 1}
+							{control nameForm}
+						{else}
+							{if isset($short["name"]) && strlen($event->name) > $short["name"]}
+								<h1>
+									{$event->name|truncate:$short["name"]}<a href="{plink event $event->id}" title="{$event->name}">více zde</a>
+								</h1>
+								
+							{else}
+								<h3>
+									{$event->name}
+									<small><a class="ajax label label-primary" n:href="nameEdit!">Edit</a></small>
+								</h3> 
+							{/if}
+						{/if}
+
+						{if isset($location_edit) && $location_edit == 1}
+							{control locationForm}
+						{else}
+							<h4>
+								{$event->location}
+								<small><a class="ajax label label-primary" n:href="locationEdit!">Edit</a></small>
+							</h4>
+						{/if}
+
+						{if isset($date_edit) && $date_edit == 1}
+							{control dateForm}
+						{/if}
+					</div>
+
+					<div class="col-md-1">
+						<a n:if="$event->hidden" n:href="unhide!" class="ajax label label-warning">Zobrazit</a>
+						<a n:if="!$event->hidden" n:href="hide!" class="ajax label label-success">Schovat</a>
+						<br />
+						<a href="{plink Concert:event $event->id}" class="label label-primary">Odkaz</a>
+						<br />
+						<a class="ajax label label-danger" n:href="delete!" title="Smazat koncert" data-confirm="Opravdu?">
+							Smazat
+						</a>
+						<br />	
+						<a href="#" class="event-show label label-primary">Více</a>
+						<br />
+					</div>
+
+
+				</div>
+			</div>
+		</li>
+		<li class="panel-body col-md-12{isset($visible)&&$visible ? '' : ' noshow'} tohide">
+			{if $event->cover}
+
+				<div class="col-md-4 panel-body links">
+					<a href="{$basePath}/{$event->cover->url}" title="" data-gallery>
+						<div n:if="$event->cover" class="img thumbnail">
+							<img src="{$basePath}/{$event->cover->thumbnail->url}?t={$event->cover->updated->getTimestamp()}" class="img-responsive img-rounded" />
+							<p class="description">{$event->name}</p>
+						</div>
+					</a>
+				</div>
+				<div class="col-md-8 panel-body">
+					{include description _event => $event, _short => $short, _content_edit => isset($content_edit) ? $content_edit}
+				</div>	
+
+			{else}
+				<div class="col-md-12 panel-body">
+					{include description _event => $event, _short => $short, _content_edit => isset($content_edit) ? $content_edit}
+				</div>	
+
+			{/if}		
+
+
+		</li>
+	</ul>
+    <hr />
+{/ifset}
+{/snippet}
+
+
+
+{define description}
+	<div class="well">
+		{if isset($_content_edit) && $_content_edit == 1}
+			{control contentForm}
+		{else}
+			{if $_event->content && strlen($_event->content)}
+				{if isset($_short["content"]) && strlen($_event->content) > $_short["content"]}
+					{!$_event->content|truncate:$_short["content"]|escape|trim|nl2br}
+				<a href="{plink Concert:event $_event->id}" title="{$_event->name}">... více zde</a>
+				{else}
+					{!$_event->content|escape|trim|nl2br}
+				{/if}
+			{else}
+				Bez popisu
+			{/if}
+			<a class="ajax label label-primary" n:href="contentEdit!">Edit</a>
+		{/if}
+	</div>
+{/define}
+
+{*
+{define editForm}
+
+	{if isset($${action}_edit) && $${action}_edit == 1}
+		{control ${action}Form}
+	{else}
+		<h3>
+			{$event->${action}}
+			<small><a class="ajax label label-primary" n:href="${action}Edit!">Edit</a></small>
+		</h3>
+	{/if}
+
+{/define}
+
+*}

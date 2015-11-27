@@ -1,0 +1,48 @@
+{snippet}
+
+	{ifset $gallery}
+		<div class="clearfix"></div>
+
+		{if isset($edit) && $edit == 1}
+			<ul class="list-unstyled clearfix">
+				<li>
+					{control editGalleryForm}
+				</li>
+			</ul>
+		{else}
+
+			<div class="col-md-6">
+				<h4>{$gallery -> name}</h4>
+			</div>
+
+			<div class="col-md-4">
+				{include datum _gallery => $gallery}
+			</div>
+
+			<div class="col-md-2">
+				{include edit _gallery => $gallery}
+			</div>
+		{/if}
+	{/ifset}
+
+{/snippet}
+
+
+{define datum}
+	<div class="panel panel-default">
+		<div class="panel-heading text-center">
+			<span class="glyphicon glyphicon-calendar pull-left"></span>
+			<h5>{$_gallery->datum|date:"j. n. Y"}</h5>
+		</div>
+	</div>
+{/define}
+
+{define edit}
+	<a n:if="!$_gallery -> hidden" n:href="hide!" class="ajax label label-success">Schovat</a>
+	<a n:if="$_gallery -> hidden" n:href="unhide!" class="ajax label label-warning">Zobrazit</a>
+	<br />
+	<a n:href="edit!" class="ajax label label-primary">Edit</a>
+	<br />
+	<a n:href="delete!" class="ajax label label-danger" data-confirm="Opravdu?">Smazat</a>
+	<br />
+{/define}

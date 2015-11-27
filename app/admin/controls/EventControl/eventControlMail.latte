@@ -1,0 +1,47 @@
+{snippet}
+{ifset $event}
+	{var $success = $event->start->getTimestamp()>time() ? "success" : "danger"}
+
+   	<ul class="list-unstyled clearfix event">
+		<li class="">
+			<div class="panel panel-{$success}">
+				<div class="panel-heading col-md-12">
+					<div class="col-md-3 panel-date">
+						{include date.latte _event => $event}
+					</div>
+
+					<div class="col-md-9">
+						{if isset($short["name"]) && strlen($event->name) > $short["name"]}
+							<h1>
+								{$event->name|truncate:$short["name"]}
+							</h1>
+							
+						{else}
+							<h3>{$event->name}</h3> 
+						{/if}
+
+						<h4>{$event->location}</h4>
+					</div>
+				</div>
+			</div>
+		</li>
+	</ul>
+    <hr />
+{/ifset}
+{/snippet}
+
+
+{define description}
+	<div class="well">
+		{if $_event->content && strlen($_event->content)}
+			{if isset($_short["content"]) && strlen($_event->content) > $_short["content"]}
+				{!$_event->content|truncate:$_short["content"]|escape|trim|nl2br}
+			{else}
+				{!$_event->content|escape|trim|nl2br}
+			{/if}
+		{else}
+			Bez popisu
+		{/if}
+	</div>
+{/define}
+

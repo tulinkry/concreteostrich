@@ -1,0 +1,72 @@
+{define #content}
+
+<h1>Archiv koncertů</h1>
+
+	{snippet events}
+   	<h1>Koncerty</h1>
+
+	<a n:href="hideAll!" class="ajax label label-success">Schovat všechny na této stránce</a>
+	<a n:href="unHideAll!" class="ajax label label-warning">Zobrazit všechny na této stránce</a>
+
+	{foreach $concerts as $concert}
+		{control events-$concert->id eventControlArchive}
+	{/foreach}
+
+	{snippet paginator}
+	{control paginator}
+	{/snippet}
+	
+	{/snippet}
+
+
+
+
+<div id="blueimp-gallery" class="blueimp-gallery">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
+
+
+<script>
+$(window).load(function (){
+	$(".links").click (function (event)
+		{
+		    event = event || window.event;
+		    var target = event.target || event.srcElement;
+		    var link = target.src ? target.parentNode.parentNode : target
+		    var options = { index: link, 
+		    				event: event, 
+		    				titleElement: 'p', 
+		    				slideContentClass: 'slide-content img-rounded', 
+		    				preloadRange: 4, 
+		    				transitionSpeed: 700,
+		    				hidePageScrollbars: false }
+		    var links = this.getElementsByTagName('a');
+			blueimp.Gallery(links, options).toggleControls();
+
+		}
+	);
+});
+</script>
+
+
+
+{/define}
+
+{*
+ * layout template
+ *}
+
+{block #administration-links}
+	<li class="list-group-item">
+		<a n:href="new" class="btn btn-success">Vložit nový</a>
+	</li>	
+	<li class="list-group-item">
+		<a n:href="default" class="btn btn-success">Viditelné</a>
+	</li>
+{/block}

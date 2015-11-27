@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+	<head>
+
+		{control css}
+		{control js}
+
+		<meta charset="utf-8">
+		<script>
+
+		</script>
+		<style>
+		</style>
+		<script>
+			 $(function() {
+			 	{if \Nette\Utils\Strings::contains ( $presenter->name, "Index" ) ||
+			 		\Nette\Utils\Strings::contains ( $presenter->name, "Photo" ) ||
+			 		\Nette\Utils\Strings::contains ( $presenter->name, "Admin" )}
+				//runEffect();
+				//runEffect2();
+				//runEffect4();
+				{else}
+					runEffect5();
+				{/if}
+			});
+		</script>
+		<title>
+			Concrete Ostrich | Kapela z Prahy
+		</title>
+	</head>
+
+	<body>
+		<div id="clona">
+		</div>
+		<div class="container fadeeffect">
+			<!-- Navigation -->
+		    <div class="navbar navbar-fixed-top navigation">
+		        <div class="container fadeeffect">
+		            <div class="img">
+		            	<img src="http://placehold.it/1170x60" alt="" class="img-rounded img-responsive" />
+		            </div>
+		        </div>
+		        <!-- /.container -->
+		    </div>
+
+			{control mainMenu}
+
+            {block #welcome}
+		       	<header class="jumbotron bg-image container row">
+		            <div class="img">
+		            	<img src="{$basePath}/logo/logo.jpg" alt="" class="img-rounded img-responsive" />
+		            </div>
+		        </header>
+            {/block}
+
+
+<!-- template for flashes -->
+<!--
+<div class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Modal title</h4>
+			</div>
+			<div class="modal-body">
+
+				<div id="#progress-bar-1424472210591" class="">
+						<div class="alert alert-error col-md-12">
+							<div class="col-md-10"><span>Událost se nepodařilo smazat.</span></div>
+							<div class="col-md-2">
+								<a href="/concreteostrich/admin.concert/archive?do=events-1-hide" type="button" class="ajax btn btn-success">
+									<span class="glyphicon glyphicon-repeat"></span>
+								</a>
+							</div>
+						</div>
+				</div>
+
+				<div id="#progress-bar-1424472210591" class="">
+						<div class="alert alert-error col-md-12">
+							<div class="col-md-10"><span>Událost se nepodařilo smazat.</span></div>
+							<div class="col-md-2">
+								<a href="/concreteostrich/admin.concert/archive?do=events-1-hide" type="button" class="ajax btn btn-success">
+									<span class="glyphicon glyphicon-repeat"></span>
+								</a>
+							</div>
+						</div>
+				</div>
+
+
+			</div>
+			<div class="clearfix"></div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script>$(".modal").modal()</script>
+
+
+-->
+
+			{block #mainContent}
+		        <div class="row content">
+		        	<!--
+			        <div class="lmenu col-md-2">
+			        </div>
+					-->
+
+			        <div class="col-md-9">
+						{snippet flashMessageArea}
+						  <div n:foreach="$flashes as $flash" class="flash alert alert-{$flash->type}">
+						    {$flash->message}
+						  </div>
+						{/snippet}		        	
+			        	{block #content}
+			        	{/block}
+
+					</div>
+
+
+			        <div class="rmenu col-md-3">
+			        	{block #rightPanel}
+			        		{block #administration}
+			        		{/block}
+
+			        		{snippet actions}
+				        	<h3>Nejbližší akce</h3>
+							    {if isset($nextActions) && count($nextActions)}
+					        	<ul class="list-group">
+						        	<li n:foreach="$nextActions as $action" class="list-group-item{ifCurrent Concert:event $action->id} list-group-item-success-hover{else} list-group-item-success{/ifCurrent}">
+					        			<a n:href="Concert:event $action->id">
+					        				<h3 class="text-success">{$action->start|date:"j. n. Y"}</h3>
+					        			</a>
+					        				{$action->name}
+					        		</li>
+					        	</ul>
+					        {else}
+					        	<p>Žádné další akce</p>
+				        	{/if}
+
+				        	<h3>Zameškané akce</h3>
+				        	{if isset($pastActions) && count($pastActions)}
+					        	<ul class="list-group">
+					        		<li n:foreach="$pastActions as $action" class="list-group-item{ifCurrent Concert:event $action->id} list-group-item-danger-hover{else} list-group-item-danger{/ifCurrent}">
+					        			<a n:href="Concert:event $action->id">
+					        				<h3 class="text-danger">{$action->start|date:"j. n. Y"}</h3>
+					        			</a>
+					        			{$action->name}
+					        		</li>
+					        	</ul>		
+					        {else}
+					        	<p>Žádné předchozí akce</p>
+				        	{/if}
+
+				        	{/snippet}
+
+				        	{*
+				        		<h3>Reklama</h3>
+					        	<p>
+			                		<endora></endora>
+						        </p>
+				        	*}
+				        {/block}
+                <p class="well"><a href="{link :Front:Contact:about}" title="O výrobci">Designed by 007</a></p>
+			        </div>
+		    	</div> <!-- content -->
+
+	    	{/block}
+
+		</div> <!-- container -->
+		
+		<div id="egg" class="hidden-sm hidden-xs attraction">
+			<div class="img">
+				<img src="{$basePath}/logo/hnizdo.png" class="img-rounded img-responsible" />
+				<!-- <img src="http://placehold.it/350x450" class="img-rounded img-responsible" /> -->
+			</div>
+		</div>	
+
+		<div id="image-left" class="hidden-sm hidden-xs attraction">
+			<div class="img">
+				<img src="{$basePath}/logo/left.png" class="img-rounded img-responsible" />
+				<!-- <img src="http://placehold.it/200x450" class="img-rounded img-responsible" /> -->
+			</div>
+		</div>	
+
+	</body>
+
+</html>

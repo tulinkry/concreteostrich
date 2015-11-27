@@ -1,0 +1,13 @@
+{define content}
+
+   	<h1>Akce</h1>
+
+	{foreach $concerts as $concert}
+		{control events-$concert->id content => 500}
+	{/foreach}
+
+	{snippet paginator}
+	{control paginator}
+	{/snippet}
+	
+{/define}

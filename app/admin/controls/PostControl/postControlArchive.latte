@@ -1,0 +1,75 @@
+{snippet}
+	{ifset $post}
+
+		{if isset($edit) && $edit == 1}
+			<ul class="list-unstyled clearfix">
+				<li>
+					{control editPostForm}
+				</li>
+			</ul>
+		{else}
+
+		   	<ul class="list-unstyled clearfix">
+				{if $post->type === \Entity\Post::TYPE_VIDEO}
+					<li class="panel panel-info">
+						<div class="panel-heading col-md-12">
+							<div class="col-md-11">
+								{if $post->name}
+									<h3>{$post->name} {$post->type}</h3>
+								{/if}
+								{include datum _post => $post}
+							</div>
+							{include edit _post => $post}
+						</div>
+					</li>
+				{elseif $post->type === \Entity\Post::TYPE_PHOTO}
+					<li class="panel panel-info">
+						<div class="panel-heading col-md-12">
+							<div class="col-md-11">
+								{if $post->name}
+									<h3>{$post->name} {$post->type}</h3>
+								{else}
+									<h3>Fotka</h3>
+								{/if}							
+								{include datum _post => $post}
+							</div>
+
+							{include edit _post => $post}
+						</div>
+					</li>
+				{else}
+					<li class="panel panel-info">
+						<div class="panel-heading col-md-12">
+							<div class="col-md-11">
+								{if $post->name}
+									<h3>{$post->name} {$post->type}</h3>
+								{/if}
+								{include datum _post => $post}
+							</div>
+
+							{include edit _post => $post}
+						</div>
+					</li>
+				{/if}
+			</ul>	
+		{/if}
+	{/ifset}
+{/snippet}
+
+{define edit}
+	<div class="col-md-1">
+		<a n:if="$_post->hidden" n:href="unhide!" class="ajax label label-warning">Zobrazit</a>
+		<a n:if="!$_post->hidden" n:href="hide!" class="ajax label label-success">Schovat</a>
+		<br />
+		<a n:href="edit!" class="ajax label label-primary">Edit</a>
+		<br />
+		<a n:href="delete!" title="Smazat post" class="ajax label label-danger" data-confirm="Opravdu?">
+			Smazat
+		</a>
+		<br />
+	</div>
+{/define}
+
+{define datum}
+	<h4>{$_post->datum|date:"d. m. Y. H:i"} {$_post->datum->weekday}</h4>
+{/define}

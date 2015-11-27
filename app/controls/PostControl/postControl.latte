@@ -1,0 +1,212 @@
+{snippet}
+	{ifset $post}
+		<div class="clearfix">
+				{if $post->type === \Entity\Post::TYPE_VIDEO}
+					{if $post->name}
+						<div class="pull-left">
+							<h3>{$post->name} [{$post->type}]</h3>
+						</div>
+					{/if}
+					<div class="pull-right">
+						{include datum2 _post => $post}
+					</div>
+					<h4 n:if="$post->message" class="pull-left panel-body">
+						{!$post->message|escape|trim|nl2br}
+					</h4>
+					<div class="clearfix"></div>
+					<div n:if="$post->link" class="links">
+							<div class="embed-responsive embed-responsive-4by3 img-rounded">
+								<iframe class="embed-responsive-item" src="{$post->link|noescape}"></iframe>
+							</div>
+					</div>
+				{elseif $post->type === \Entity\Post::TYPE_PHOTO}
+						{if $post->name}
+							<div class="pull-left">
+								<h3>{$post->name} [{$post->type}]</h3>
+							</div>
+						{else}
+							<div class="pull-left">
+								<h3>Fotka</h3>
+							</div>
+						{/if}							
+						<div class="pull-right">
+							{include datum2 _post => $post}
+						</div>
+						<div class="clearfix"></div>
+						<div class="col-md-4">
+							<a href="{$basePath}/{$post->image->url}" title="" data-gallery>
+								<div n:if="$post->image" class="img thumbnail">
+									<img src="{$basePath}/{$post->image->thumbnail->url}?t={$post->image->updated->getTimestamp()}" class="img-responsive img-rounded" />
+									<p n:if="$post->name" class="description">{$post->name}</p>
+								</div>
+							</a>
+						</div>
+						<div n:if="$post->message" class="col-md-8">
+							<div class="well">
+								{!$post->message|escape|trim|nl2br}
+							</div>
+						</div>
+				{else}
+					{if $post->name}
+						<div class="pull-left">
+							<h3>{$post->name} [{$post->type}]</h3>
+						</div>
+					{/if}
+					<div class="pull-right">
+						{include datum2 _post => $post}
+					</div>
+
+					<h4 n:if="$post->message" class="pull-left panel-body">
+						{!$post->message|escape|trim|nl2br}
+					</h4>		
+				{/if}
+
+		</div>
+	{/ifset}
+{/snippet}
+
+
+{define datum}
+	<p>{$_post->datum->weekday} {$_post->datum|date:"d. m. Y"}</p>
+{/define}
+
+{define datum2}
+<div class="panel panel-default">
+	<div class="panel-heading text-center">
+		<span class="glyphicon glyphicon-calendar pull-left"></span>
+		<h5>{$_post->datum->weekday} {$_post->datum|date:"j. n."} {$_post->datum|date:"Y"}</h5>
+	</div>
+</div>		
+{/define}
+
+{*
+
+	    type: <strong>{$post->type}</strong> <br>
+	    <small>
+	        id: {$post->id}<br>
+	        created_time: {$post->created_time} <br>
+	        updated_time: {$post->updated_time} <br>
+	    </small>
+
+	    {ifset $post->name}
+	        name: <h1>{$post->name}</h1>
+	    {/ifset}
+
+	    {ifset $post->status_type}
+	        status_type: {$post->status_type} <br>
+	    {/ifset}
+
+	    {ifset $post->message}
+	        message: {$post->message} <br>
+	    {/ifset}
+
+	    {ifset $post->picture}
+	        piscture: {$post->picture} <br>
+	        <img src="{$post->picture}" />
+	    {/ifset}
+
+	    {ifset $post->link}
+	        link: <a href="{$post->link}">{$post->link}</a> <br>
+	    {/ifset}
+
+	    {ifset $post->caption}
+	        caption: {$post->caption} <br>
+	    {/ifset}
+
+*}
+
+
+{*
+
+last version
+
+{snippet}
+	{ifset $post}
+
+		{if isset($edit) && $edit == 1}
+			<ul class="list-unstyled clearfix">
+				<li>
+					{control editPostForm}
+				</li>
+			</ul>
+		{else}
+
+		   	<ul class="list-unstyled clearfix">
+				{if $post->type === \Entity\Post::TYPE_VIDEO}
+					<li class="panel panel-info">
+						<div class="panel-heading col-md-12">
+							<div class="col-md-12">
+								{if $post->name}
+									<h3>{$post->name} {$post->type}</h3>
+								{/if}
+								{include datum _post => $post}
+							</div>
+						</div>
+					</li>
+					<li n:if="$post->message" class="panel-body col-md-12">
+						<div class="well">
+							{!$post->message|escape|trim|nl2br}
+						</div>
+					</li>
+					<li n:if="$post->link" class="links panel-body col-md-12">
+							<div class="embed-responsive embed-responsive-4by3 col-md-12 img-rounded">
+								<iframe class="embed-responsive-item" src="{$post->link|noescape}"></iframe>
+							</div>
+					</li>
+				{elseif $post->type === \Entity\Post::TYPE_PHOTO}
+					<li class="panel panel-info">
+						<div class="panel-heading col-md-12">
+							<div class="col-md-12">
+								{if $post->name}
+									<h3>{$post->name} {$post->type}</h3>
+								{else}
+									<h3>Fotka</h3>
+								{/if}							
+								{include datum _post => $post}
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="col-md-4 panel-body col-md-12">
+							<a href="{$basePath}/{$post->image->url}" title="" data-gallery>
+								<div n:if="$post->image" class="img thumbnail">
+									<img src="{$basePath}/{$post->image->thumbnail->url}?t={$post->image->updated->getTimestamp()}" class="img-responsive img-rounded" />
+									<p class="description">Popis</p>
+								</div>
+							</a>
+						</div>
+						<div n:if="$post->message" class="col-md-8 panel-body col-md-12">
+							<div class="well">
+								{!$post->message|escape|trim|nl2br}
+							</div>
+						</div>
+
+					</li>
+				{else}
+					<li class="panel panel-info">
+						<div class="panel-heading col-md-12">
+							<div class="col-md-12">
+								{if $post->name}
+									<h3>{$post->name} {$post->type}</h3>
+								{/if}
+								{include datum _post => $post}
+							</div>
+						</div>
+					</li>
+					<li n:if="$post->message" class="panel-body col-md-12">
+						<div class="well">
+							{!$post->message|escape|trim|nl2br}
+						</div>
+					</li>			
+				{/if}
+			</ul>	
+		{/if}
+	{/ifset}
+{/snippet}
+
+
+{define datum}
+	<h4>{$_post->datum|date:"d. m. Y. H:i"} {$_post->datum->weekday}</h4>
+{/define}
+
+*}

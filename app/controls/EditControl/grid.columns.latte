@@ -1,0 +1,28 @@
+{define col-thumbnail}
+<td class="grid-col-thumbnail">
+    <img src="{$basePath}/{$cell->url}?t={time()}" style="height: 80px; width: 80px;" />
+</td>
+{/define}
+
+
+{define col-gallery}
+<td class="grid-col-gallery">
+    {ifset $cell->name}
+    	{$cell->name}
+    {/ifset}
+</td>
+{/define}
+
+{define col-rotate}
+<td class="grid-col-rotate">
+    <a n:href="rotate! $row->id, 90" class="ajax">+90</a> 
+    <a n:href="rotate! $row->id, 180" class="ajax">+180</a> 
+    <a n:href="rotate! $row->id, 270" class="ajax">+270</a> 
+</td>
+{/define}
+
+{define col-delete}
+<td class="grid-col-delete">
+    <a n:href="delete! $row->id" class="btn btn-danger btn-xs ajax" data-confirm="Opravdu?">D</a> 
+</td>
+{/define}

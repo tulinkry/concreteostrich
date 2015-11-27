@@ -1,0 +1,23 @@
+{define #content}
+
+{control addGalleryForm}
+
+{/define}
+
+
+{*
+ * layout template
+ *}
+
+
+{block #administration-links}
+	<li class="list-group-item">
+		<a n:href="upload" class="btn btn-danger">Upload</a>
+	</li>	
+	<li class="list-group-item">
+		<a n:href="default" class="btn btn-success">Všechny</a>
+	</li>
+	<li class="list-group-item">
+		<a n:href="gallery" class="btn btn-success">Galerie</a>
+	</li>	
+{/block}

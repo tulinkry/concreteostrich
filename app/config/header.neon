@@ -1,0 +1,127 @@
+parameters:
+	#assetsDir: %libsDir%/tulinkry/assets
+	assets: %appDir%/tulinkry/assets
+	addons: %assets%/js/addons
+
+	js-extensions: 
+		ajax-progress-bar:
+			path: %addons%/ajax-progress-bar.js
+
+
+	header:
+		css: [
+			https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css
+			assets: [
+				#bootstrap
+				#bootstrap/bootstrap3.3.2.min.css,
+
+				# grid component
+				grid/nextras.datagrid.css,
+
+				# paginator component
+				paginator/paginator.css,
+
+				# gallery component
+				gallery/blueimp-gallery.min.css,
+				gallery/blueimp-gallery-video.css,
+
+				# upload component
+				upload/jquery.fileupload.css,
+				upload/jquery.fileupload-ui.css,
+
+				# timepicker
+				timepicker/datetimepicker.min.css
+			],
+			screen3.css,
+		]
+		js: [
+			netteAjax.js,
+
+			http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js,
+			https://code.jquery.com/ui/1.11.1/jquery-ui.min.js,
+			#https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js,
+			assets: [
+				#bootstrap
+				bootstrap/bootstrap3.3.2.min.js,
+
+
+				# grid component
+				grid/nextras.datagrid.js,
+
+				# gallery component
+				gallery/blueimp-gallery.min.js,
+				gallery/jquery.blueimp-gallery.min.js,
+
+
+				# upload component, strict order
+				#upload/template.min.js,
+				upload/load-image.all.min.js,
+				upload/canvas-to-blob.min.js,
+				upload/jquery.iframe-transport.js,
+				upload/jquery.fileupload.js,
+				upload/jquery.fileupload-process.js
+				upload/jquery.fileupload-image.js
+				upload/jquery.fileupload-audio.js
+				upload/jquery.fileupload-video.js
+				upload/jquery.fileupload-validate.js
+				upload/jquery.fileupload-ui.js,
+
+				# timepicker
+				timepicker/moment.js
+				timepicker/datetimepicker.js,
+
+				#map
+				map/markerclusterer.js
+			]
+			bootbox.js,
+			main.js,
+			netteForms.js
+		]
+
+
+#<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+#<!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+#<script src="js/vendor/jquery.ui.widget.js"></script>
+
+#<!-- The Templates plugin is included to render the upload/download listings -->
+#<script src="//blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script>
+
+#<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+#<script src="//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+
+#<!-- The Canvas to Blob plugin is included for image resizing functionality -->
+#<script src="//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+
+#<!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
+#<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+#<!-- blueimp Gallery script -->
+#<script src="//blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
+
+#<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+#<script src="js/jquery.iframe-transport.js"></script>
+
+#<!-- The basic File Upload plugin -->
+#<script src="js/jquery.fileupload.js"></script>
+
+#<!-- The File Upload processing plugin -->
+#<script src="js/jquery.fileupload-process.js"></script>
+
+#<!-- The File Upload image preview & resize plugin -->
+#<script src="js/jquery.fileupload-image.js"></script>
+
+#<!-- The File Upload audio preview plugin -->
+#<script src="js/jquery.fileupload-audio.js"></script>
+
+#<!-- The File Upload video preview plugin -->
+#<script src="js/jquery.fileupload-video.js"></script>
+
+#<!-- The File Upload validation plugin -->
+#<script src="js/jquery.fileupload-validate.js"></script>
+
+#<!-- The File Upload user interface plugin -->
+#<script src="js/jquery.fileupload-ui.js"></script>
+
+#<!-- The main application script -->
+#<script src="js/main.js"></script>

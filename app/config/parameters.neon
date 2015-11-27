@@ -1,0 +1,15 @@
+parameters:
+	contactEmails:
+		- "k.tulinger@gmail.com"
+		- "k.tulinger@seznam.cz"
+		- "concreteostrich@gmail.com"
+	import:
+		to:
+			- "k.tulinger@gmail.com"
+			- "concreteostrich@gmail.com"
+		subject:
+			"Concrete Ostrich - %s"
+		from:
+			"k.tulinger@seznam.cz"
+		eventsTemplate: %appDir%/admin/templates/emails/events.latte
+		postsTemplate: %appDir%/admin/templates/emails/posts.latte

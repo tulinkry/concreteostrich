@@ -1,0 +1,134 @@
+{define #content}
+
+	<h1>Úvod</h1>
+
+	<p>Kapela hraje ve složení: alt saxofon, tenor saxofon, bass klari- net, 2 trumpety, pozoun, bicí souprava, bass kytara, elektrická kytara a keyboard. Tři ze členů jsou studenti Konzervatoře Jaroslava Ježka v Praze, další dva hráči studují na státní Pražské konzervatoři. Ostatní členové jsou skvělí muzikanti, věnující se jazzu celý život.</p>
+
+	<p>Více se dozvíte <a n:href="Band:default">zde</a></p>
+
+	<h2>Aktuality</h2>
+
+	{snippet posts}
+		{foreach $posts as $post}
+			{control posts-$post->id}
+			<hr />
+		{/foreach}
+	{/snippet}
+
+	{foreach $wallposts as $post}
+	    type: <strong>{$post->type}</strong> <br>
+	    <small>
+	        id: {$post->id}<br>
+	        created_time: {$post->created_time} <br>
+	        updated_time: {$post->updated_time} <br>
+	    </small>
+
+	    {ifset $post->name}
+	        name: <h1>{$post->name}</h1>
+	    {/ifset}
+
+	    {ifset $post->status_type}
+	        status_type: {$post->status_type} <br>
+	    {/ifset}
+
+	    {ifset $post->message}
+	        message: {$post->message} <br>
+	    {/ifset}
+
+	    {ifset $post->picture}
+	        piscture: {$post->picture} <br>
+	        <img src="{$post->picture}" />
+	    {/ifset}
+
+	    {ifset $post->link}
+	        link: <a href="{$post->link}">{$post->link}</a> <br>
+	    {/ifset}
+
+	    {ifset $post->caption}
+	        caption: {$post->caption} <br>
+	    {/ifset}
+	    <hr>
+	{/foreach}
+{*
+
+<div id="links">
+	<div n:snippet="images">
+		{foreach $columns as $id_column => $images}
+			<div class="col-lg-{$colNumbers[$id_column]} col-md-{$colNumbers[$id_column]} col-sm-6" n:snippet="column-{$id_column}" data-ajax-append>
+			{foreach $images as $image}
+				{if $image instanceof \Tulinkry\Gallery\Gallery}
+					<div class="img-rounded img-responsive">
+						<h3>{$image->name}</h3>
+						<h4>{$image->date|date:'j. n. Y'}</h4>
+						<p>{$image->info}</p>
+					</div>
+				{else}
+					<a href="{$basePath}/{$image->path}?t={$image->date->getTimestamp()}" title="{$image->info}">
+						<div class="img">
+							<img src="{$basePath}/{$image->thumbnail}?t={$image->date->getTimestamp()}" class="img-responsive img-rounded" />
+							<p class="description">{$image->info}</p>
+						</div>
+					</a>
+
+				{/if}
+			{/foreach}
+			</div>
+		{/foreach}
+	</div>
+</div>
+
+*}
+
+
+<div id="blueimp-gallery" class="blueimp-gallery">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
+
+
+<script>
+$(window).load(function (){
+	$(".links").click (function (event)
+		{
+		    event = event || window.event;
+		    var target = event.target || event.srcElement;
+		    var link = target.src ? target.parentNode.parentNode : target
+		    var options = { index: link, 
+		    				event: event, 
+		    				titleElement: 'p', 
+		    				slideContentClass: 'slide-content img-rounded', 
+		    				preloadRange: 4, 
+		    				transitionSpeed: 700,
+		    				hidePageScrollbars: false }
+		    var links = this.getElementsByTagName('a');
+			blueimp.Gallery(links, options).toggleControls();
+
+		}
+	);
+});
+</script>
+
+	{snippet paginator}
+	{control paginator}
+	{/snippet}
+
+
+{/define}
+
+{*
+ * layout template
+ *}
+
+{block #administration-links}
+	<li class="list-group-item">
+		<a n:href="new" class="btn btn-success">Vložit nový</a>
+	</li>	
+	<li class="list-group-item">
+		<a n:href="archive" class="btn btn-success">Všechny</a>
+	</li>
+{/block}

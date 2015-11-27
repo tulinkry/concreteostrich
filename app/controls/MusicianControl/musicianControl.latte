@@ -1,0 +1,21 @@
+{snippet}
+   	<ul class="list-unstyled">
+		<li>
+			<h3>{$musician->name} {$musician->surname}</h3>
+		</li>
+		<li class="col-md-12">
+			<div class="col-md-6">
+			{if $musician->photo}
+				<div class="img">
+					<img class="img-responsive img-rounded" src="{$basePath}/{$musician->photo->url}" />
+					<p>{$musician->name} {$musician->surname}</p>
+				</div>
+			{/if}
+			</div>
+			<div class="col-md-6">
+				{$musician->content}
+			</div>
+	    	<hr />
+		</li>
+	</ul>	
+{/snippet}

@@ -1,0 +1,46 @@
+{define upload-thead-tr}
+    <th></th>
+    <th>Jméno</th>
+    <th>Popis</th>
+    <th>Galerie</th>
+    <th>Velikost</th>
+    <th></th>
+{/define}
+
+
+{define upload-tbody-tr}
+    <td class="preview"><span class="fade"></span></td>
+    
+    <td>
+        <p class="name"></p>
+        <strong class="error text-danger"></strong>
+    </td>
+    <td>
+        <input type="text" value="" name="content[]" class="form-control" />
+    </td>
+    <td>
+        <select name="gallery[]" class="form-control">
+        	{foreach $galleries as $gallery}
+                <option value="{$gallery->id}">{$gallery->name}</option>
+            {/foreach}
+        </select>
+    </td>
+
+    <td class="process">
+        <p class="size">Processing...</p>
+        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+    
+    </td>
+    <td class="start-container">
+        <button class="btn btn-primary start">
+            <i class="icon-upload icon-white"></i>
+            <span>Start</span>
+        </button>
+    </td>
+    <td class="stop-container">
+        <button class="btn btn-warning cancel">
+            <i class="icon-ban-circle icon-white"></i>
+            <span>Cancel</span>
+        </button>
+    </td>
+{/define}
