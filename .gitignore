@@ -1,5 +1,2 @@
-log/*
-
-temp/*
 composer.lock
 app/config/config.local.neon
