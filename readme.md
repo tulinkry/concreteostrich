@@ -26,6 +26,7 @@ Create local configuration
 cd /var/www/concreteostrich/app/config
 nano config.local.neon
 ```
+Modify based on your configuration
 
 ```txt
 common:
