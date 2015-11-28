@@ -108,7 +108,7 @@ class Application extends Symfony\Component\Console\Application
 				$this->handleException($e, $output);
 			}
 
-			return max(min((int) $e->getCode(), 254), 254);
+			return max(min((int) $e->getCode(), 254), 1);
 		}
 	}
 
@@ -124,6 +124,10 @@ class Application extends Symfony\Component\Console\Application
 			$output->writeln('');
 
 			if (Debugger::$browser) {
+				if (!file_exists($file)) {
+					$file = Debugger::$logDirectory . '/' . $file;
+				}
+
 				exec(Debugger::$browser . ' ' . escapeshellarg($file));
 			}
 		}

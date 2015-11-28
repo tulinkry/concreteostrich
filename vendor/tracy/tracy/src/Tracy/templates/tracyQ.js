@@ -133,7 +133,7 @@ var Tracy = Tracy || {};
 
 	// tests whether element has given class
 	Query.prototype.hasClass = function(className) {
-		return this[0] && this[0].className && this[0].className.replace(/^|\s+|$/g, ' ').indexOf(' '+className+' ') > -1;
+		return this[0] && (typeof this[0].className === 'string') && this[0].className.replace(/^|\s+|$/g, ' ').indexOf(' '+className+' ') > -1;
 	};
 
 	Query.prototype.show = function() {
@@ -252,6 +252,9 @@ var Tracy = Tracy || {};
 			started = false;
 
 			dE.onmousemove = function(e) {
+				if (!e.buttons) {
+					return dE.onmouseup(e);
+				}
 				e = e || window.event;
 				if (!started) {
 					if (options.draggedClass) {

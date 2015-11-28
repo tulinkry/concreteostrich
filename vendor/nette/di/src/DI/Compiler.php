@@ -7,8 +7,8 @@
 
 namespace Nette\DI;
 
-use Nette,
-	Nette\Utils\Validators;
+use Nette;
+use Nette\Utils\Validators;
 
 
 /**
@@ -61,7 +61,7 @@ class Compiler extends Nette\Object
 	public function getExtensions($type = NULL)
 	{
 		return $type
-			? array_filter($this->extensions, function($item) use ($type) { return $item instanceof $type; })
+			? array_filter($this->extensions, function ($item) use ($type) { return $item instanceof $type; })
 			: $this->extensions;
 	}
 
@@ -185,7 +185,7 @@ class Compiler extends Nette\Object
 
 		foreach ($all as $origName => $def) {
 			if ((string) (int) $origName === (string) $origName) {
-				$name = count($builder->getDefinitions())
+				$name = (count($builder->getDefinitions()) + 1)
 					. preg_replace('#\W+#', '_', $def instanceof \stdClass ? ".$def->value" : (is_scalar($def) ? ".$def" : ''));
 			} elseif (array_key_exists($origName, $services) && array_key_exists($origName, $factories)) {
 				throw new ServiceCreationException("It is not allowed to use services and factories with the same name: '$origName'.");

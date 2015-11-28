@@ -11,6 +11,7 @@ use Nette\Mail\IMailer;
 
 
 /**
+ * @IgnoreAnnotation ( "Cron" )
  * @Cron
  */
 class ImportPresenter extends BasePresenter

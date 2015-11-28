@@ -7,8 +7,8 @@
 
 namespace Nette\Caching;
 
-use Nette,
-	Nette\Utils\Callback;
+use Nette;
+use Nette\Utils\Callback;
 
 
 /**
@@ -79,7 +79,7 @@ class Cache extends Nette\Object implements \ArrayAccess
 	/**
 	 * Returns new nested cache object.
 	 * @param  string
-	 * @return Cache
+	 * @return self
 	 */
 	public function derive($namespace)
 	{
@@ -98,7 +98,9 @@ class Cache extends Nette\Object implements \ArrayAccess
 	{
 		$data = $this->storage->read($this->generateKey($key));
 		if ($data === NULL && $fallback) {
-			return $this->save($key, Callback::closure($fallback));
+			return $this->save($key, function (& $dependencies) use ($fallback) {
+				return call_user_func_array($fallback, array(& $dependencies));
+			});
 		}
 		return $data;
 	}
@@ -143,8 +145,8 @@ class Cache extends Nette\Object implements \ArrayAccess
 	private function completeDependencies($dp, $data)
 	{
 		// convert expire into relative amount of seconds
-		if (isset($dp[Cache::EXPIRATION])) {
-			$dp[Cache::EXPIRATION] = Nette\Utils\DateTime::from($dp[Cache::EXPIRATION])->format('U') - time();
+		if (isset($dp[self::EXPIRATION])) {
+			$dp[self::EXPIRATION] = Nette\Utils\DateTime::from($dp[self::EXPIRATION])->format('U') - time();
 		}
 
 		// convert FILES into CALLBACKS
@@ -209,8 +211,10 @@ class Cache extends Nette\Object implements \ArrayAccess
 	public function call($function)
 	{
 		$key = func_get_args();
-		$key[0] = Callback::toReflection($function);
-		return $this->load($key, function() use ($function, $key) {
+		if (is_array($function) && is_object($function[0])) {
+			$key[0][0] = get_class($function[0]);
+		}
+		return $this->load($key, function () use ($function, $key) {
 			return Callback::invokeArgs($function, array_slice($key, 1));
 		});
 	}
@@ -225,8 +229,11 @@ class Cache extends Nette\Object implements \ArrayAccess
 	public function wrap($function, array $dependencies = NULL)
 	{
 		$cache = $this;
-		return function() use ($cache, $function, $dependencies) {
-			$key = array(Callback::toReflection($function), func_get_args());
+		return function () use ($cache, $function, $dependencies) {
+			$key = array($function, func_get_args());
+			if (is_array($function) && is_object($function[0])) {
+				$key[0][0] = get_class($function[0]);
+			}
 			$data = $cache->load($key);
 			if ($data === NULL) {
 				$data = $cache->save($key, Callback::invokeArgs($function, $key[1]), $dependencies);

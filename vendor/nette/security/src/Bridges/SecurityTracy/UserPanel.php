@@ -7,8 +7,8 @@
 
 namespace Nette\Bridges\SecurityTracy;
 
-use Nette,
-	Tracy;
+use Nette;
+use Tracy;
 
 
 /**
@@ -34,7 +34,7 @@ class UserPanel extends Nette\Object implements Tracy\IBarPanel
 	 */
 	public function getTab()
 	{
-		if (headers_sent()) {
+		if (headers_sent() && !session_id()) {
 			return;
 		}
 

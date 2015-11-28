@@ -20,9 +20,13 @@ use Nette;
  */
 class ConsoleExtension extends Nette\DI\CompilerExtension
 {
+	/** @deprecated */
+	const HELPER_TAG = self::TAG_HELPER;
+	/** @deprecated */
+	const COMMAND_TAG = self::TAG_COMMAND;
 
-	const HELPER_TAG = 'kdyby.console.helper';
-	const COMMAND_TAG = 'kdyby.console.command';
+	const TAG_HELPER = 'kdyby.console.helper';
+	const TAG_COMMAND = 'kdyby.console.command';
 
 	/**
 	 * @var array
@@ -53,22 +57,21 @@ class ConsoleExtension extends Nette\DI\CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig($this->defaults);
 
-		if ($config['disabled']) {
-			return;
-		}
-
 		$helperClasses = array(
-			'Symfony\Component\Console\Helper\DialogHelper',
 			'Symfony\Component\Console\Helper\FormatterHelper',
 			'Symfony\Component\Console\Helper\QuestionHelper',
 			'Kdyby\Console\Helpers\PresenterHelper',
 		);
 
+		$helperClasses = array_map(function ($class) { return new Nette\DI\Statement($class); }, $helperClasses);
+
 		if (class_exists('Symfony\Component\Console\Helper\ProgressHelper')) {
-			$helperClasses[] = 'Symfony\Component\Console\Helper\ProgressHelper';
+			$helperClasses[] = new Nette\DI\Statement('Symfony\Component\Console\Helper\ProgressHelper', array(false));
 		}
 
-		$helperClasses = array_map(function ($class) { return new Nette\DI\Statement($class); }, $helperClasses);
+		if (class_exists('Symfony\Component\Console\Helper\DialogHelper')) {
+			$helperClasses[] = new Nette\DI\Statement('Symfony\Component\Console\Helper\DialogHelper', array(false));
+		}
 
 		$builder->addDefinition($this->prefix('helperSet'))
 			->setClass('Symfony\Component\Console\Helper\HelperSet', array($helperClasses))
@@ -80,41 +83,18 @@ class ConsoleExtension extends Nette\DI\CompilerExtension
 			->addSetup('injectServiceLocator')
 			->setInject(FALSE);
 
-		if (PHP_SAPI === 'cli') {
-			$builder->getDefinition('application')
-				->addSetup('$self = $this; $service->onError[] = function ($app, $e) use ($self) {' . "\n" .
-					"\t" . '$app->errorPresenter = ?;' . "\n" .
-					"\t" . '$app->onShutdown[] = function () { exit(?); };' . "\n" .
-					"\t" . '$self->getService(?)->handleException($e); ' . "\n" .
-					'}', array(FALSE, 254, $this->prefix('application')));
+		$builder->addDefinition($this->prefix('dicHelper'))
+			->setClass('Kdyby\Console\ContainerHelper')
+			->addTag(self::TAG_HELPER, 'dic');
+
+		if ($config['disabled']) {
+			return;
 		}
 
 		$builder->addDefinition($this->prefix('router'))
 			->setClass('Kdyby\Console\CliRouter')
 			->setAutowired(FALSE)
 			->setInject(FALSE);
-
-		$builder->getDefinition('router')
-			->addSetup('Kdyby\Console\CliRouter::prependTo($service, ?)', array($this->prefix('@router')));
-
-		$builder->getDefinition('nette.presenterFactory')
-			->addSetup('if (method_exists($service, ?)) { $service->setMapping(array(? => ?)); } ' .
-				'elseif (property_exists($service, ?)) { $service->mapping[?] = ?; }', array(
-				'setMapping', 'Kdyby', 'KdybyModule\*\*Presenter', 'mapping', 'Kdyby', 'KdybyModule\*\*Presenter'
-			));
-
-		if (!empty($config['url'])) {
-			if (!preg_match('~^https?://[^/]+(/.*)?$~', $config['url'])) {
-				throw new Nette\Utils\AssertionException("The url '{$config['url']}' is not valid, please use this format: 'http://domain.tld/path'.");
-			}
-			$builder->getDefinition('nette.httpRequestFactory')
-				->setClass('Kdyby\Console\HttpRequestFactory')
-				->addSetup('setFakeRequestUrl', array($config['url']));
-		}
-
-		$builder->addDefinition($this->prefix('dicHelper'))
-			->setClass('Kdyby\Console\ContainerHelper')
-			->addTag(self::HELPER_TAG, 'dic');
 
 		Nette\Utils\Validators::assert($config, 'array');
 		foreach ($config['commands'] as $command) {
@@ -129,7 +109,7 @@ class ConsoleExtension extends Nette\DI\CompilerExtension
 
 			$def->setAutowired(FALSE);
 			$def->setInject(FALSE);
-			$def->addTag(self::COMMAND_TAG);
+			$def->addTag(self::TAG_COMMAND);
 		}
 	}
 
@@ -144,18 +124,46 @@ class ConsoleExtension extends Nette\DI\CompilerExtension
 			return;
 		}
 
+		if (PHP_SAPI === 'cli') {
+			$builder->getDefinition($builder->getByType('Nette\Application\Application') ?: 'application')
+				->addSetup('$self = $this; $service->onError[] = function ($app, $e) use ($self) {' . "\n" .
+					"\t" . '$app->errorPresenter = ?;' . "\n" .
+					"\t" . '$app->onShutdown[] = function () { exit(?); };' . "\n" .
+					"\t" . '$self->getService(?)->handleException($e); ' . "\n" .
+					'}', array(FALSE, 254, $this->prefix('application')));
+		}
+
+		$builder->getDefinition($builder->getByType('Nette\Application\IRouter') ?: 'router')
+			->addSetup('Kdyby\Console\CliRouter::prependTo($service, ?)', array($this->prefix('@router')));
+
+		$builder->getDefinition($builder->getByType('Nette\Application\IPresenterFactory') ?: 'nette.presenterFactory')
+			->addSetup('if (method_exists($service, ?)) { $service->setMapping(array(? => ?)); } ' .
+				'elseif (property_exists($service, ?)) { $service->mapping[?] = ?; }', array(
+				'setMapping', 'Kdyby', 'KdybyModule\*\*Presenter', 'mapping', 'Kdyby', 'KdybyModule\*\*Presenter'
+			));
+
+		if (!empty($config['url'])) {
+			if (!preg_match('~^https?://[^/]+(/.*)?$~', $config['url'])) {
+				throw new Nette\Utils\AssertionException("The url '{$config['url']}' is not valid, please use this format: 'http://domain.tld/path'.");
+			}
+			$builder->getDefinition($builder->getByType('Nette\Http\RequestFactory') ?: 'nette.httpRequestFactory')
+				->setFactory('Kdyby\Console\HttpRequestFactory')
+				->addSetup('setFakeRequestUrl', array($config['url']));
+		}
+
 		$helperSet = $builder->getDefinition($this->prefix('helperSet'));
-		foreach ($builder->findByTag(self::HELPER_TAG) as $serviceName => $value) {
+		foreach ($builder->findByTag(self::TAG_HELPER) as $serviceName => $value) {
 			$helperSet->addSetup('set', array('@' . $serviceName, $value));
 		}
 
 		$app = $builder->getDefinition($this->prefix('application'));
-		foreach (array_keys($builder->findByTag(self::COMMAND_TAG)) as $serviceName) {
+		foreach (array_keys($builder->findByTag(self::TAG_COMMAND)) as $serviceName) {
 			$app->addSetup('add', array('@' . $serviceName));
 		}
 
-		if ($builder->hasDefinition('events.symfonyProxy')
-			&& $builder->getDefinition('events.symfonyProxy')->class === 'Symfony\Component\EventDispatcher\EventDispatcherInterface'
+		$sfDispatcher = $builder->getByType('Symfony\Component\EventDispatcher\EventDispatcherInterface') ?: 'events.symfonyProxy';
+		if ($builder->hasDefinition($sfDispatcher)
+			&& $builder->getDefinition($sfDispatcher)->class === 'Symfony\Component\EventDispatcher\EventDispatcherInterface'
 		) {
 			$app->addSetup('setDispatcher');
 		}

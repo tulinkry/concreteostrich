@@ -11,7 +11,7 @@ use Nette;
 
 
 /**
- * Validation utilites.
+ * Validation utilities.
  *
  * @author     David Grudl
  */
@@ -26,7 +26,7 @@ class Validators extends Nette\Object
 		'number' => NULL, // is_int || is_float,
 		'numeric' => array(__CLASS__, 'isNumeric'),
 		'numericint' => array(__CLASS__, 'isNumericInt'),
-		'string' =>  'is_string',
+		'string' => 'is_string',
 		'unicode' => array(__CLASS__, 'isUnicode'),
 		'array' => 'is_array',
 		'list' => array('Nette\Utils\Arrays', 'isList'),
@@ -52,7 +52,7 @@ class Validators extends Nette\Object
 	);
 
 	protected static $counters = array(
-		'string' =>  'strlen',
+		'string' => 'strlen',
 		'unicode' => array('Nette\Utils\Strings', 'length'),
 		'array' => 'count',
 		'list' => 'count',
@@ -96,6 +96,7 @@ class Validators extends Nette\Object
 	 * @param  array
 	 * @param  string  item
 	 * @param  string  expected types separated by pipe
+	 * @param  string
 	 * @return void
 	 */
 	public static function assertField($arr, $field, $expected = NULL, $label = "item '%' in array")
@@ -254,9 +255,11 @@ class Validators extends Nette\Object
 	public static function isUrl($value)
 	{
 		$alpha = "a-z\x80-\xFF";
+		$subDomain = "[-_0-9$alpha]";
 		$domain = "[0-9$alpha](?:[-0-9$alpha]{0,61}[0-9$alpha])?";
 		$topDomain = "[$alpha](?:[-0-9$alpha]{0,17}[$alpha])?";
-		return (bool) preg_match("(^https?://(?:(?:$domain\\.)*$topDomain|\\d{1,3}\.\\d{1,3}\.\\d{1,3}\.\\d{1,3}|\[[0-9a-f:]{3,39}\])(:\\d{1,5})?(/\\S*)?\\z)i", $value);
+		$domainName = "(?:(?:$subDomain+\\.)*?$domain\\.)?$topDomain";
+		return (bool) preg_match("(^https?://(?:$domainName|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\[[0-9a-f:]{3,39}\])(:\\d{1,5})?(/\\S*)?\\z)i", $value);
 	}
 
 

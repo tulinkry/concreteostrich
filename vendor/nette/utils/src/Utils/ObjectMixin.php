@@ -7,8 +7,8 @@
 
 namespace Nette\Utils;
 
-use Nette,
-	Nette\MemberAccessException;
+use Nette;
+use Nette\MemberAccessException;
 
 
 /**
@@ -49,7 +49,6 @@ class ObjectMixin
 	{
 		$class = get_class($_this);
 		$isProp = self::hasProperty($class, $name);
-		$methods = & self::getMethods($class);
 
 		if ($name === '') {
 			throw new MemberAccessException("Call to class '$class' method without name.");
@@ -63,10 +62,10 @@ class ObjectMixin
 					Callback::invokeArgs($handler, $args);
 				}
 			} elseif ($_this->$name !== NULL) {
-				throw new Nette\UnexpectedValueException("Property $class::$$name must be array or NULL, " . gettype($_this->$name) ." given.");
+				throw new Nette\UnexpectedValueException("Property $class::$$name must be array or NULL, " . gettype($_this->$name) . ' given.');
 			}
 
-		} elseif (isset($methods[$name]) && is_array($methods[$name])) { // magic @methods
+		} elseif (($methods = & self::getMethods($class)) && isset($methods[$name]) && is_array($methods[$name])) { // magic @methods
 			list($op, $rp, $type) = $methods[$name];
 			if (count($args) !== ($op === 'get' ? 0 : 1)) {
 				throw new Nette\InvalidArgumentException("$class::$name() expects " . ($op === 'get' ? 'no' : '1') . ' argument, ' . count($args) . ' given.');
@@ -230,9 +229,10 @@ class ObjectMixin
 			try {
 				$rp = new \ReflectionProperty($class, $name);
 				if ($rp->isPublic() && !$rp->isStatic()) {
-					$prop = preg_match('#^on[A-Z]#', $name) ? 'event' : TRUE;
+					$prop = $name >= 'onA' && $name < 'on_' ? 'event' : TRUE;
 				}
-			} catch (\ReflectionException $e) {}
+			} catch (\ReflectionException $e) {
+			}
 		}
 		return $prop;
 	}
@@ -276,7 +276,8 @@ class ObjectMixin
 			if ($rc->hasProperty($prop) && ($rp = $rc->getProperty($prop)) && !$rp->isStatic()) {
 				$rp->setAccessible(TRUE);
 				if ($op === 'get' || $op === 'is') {
-					$type = NULL; $op = 'get';
+					$type = NULL;
+					$op = 'get';
 				} elseif (!$type && preg_match('#@var[ \t]+(\S+)' . ($op === 'add' ? '\[\]#' : '#'), $rp->getDocComment(), $m)) {
 					$type = $m[1];
 				}

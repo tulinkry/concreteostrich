@@ -18,10 +18,10 @@
 		"php": ">= 5.3.7",
 		"nette/nette": "~2.2.0",
 		"dg/adminer-custom": "~1.5",
-		"kdyby/facebook" : "dev-master",
-	    "kdyby/doctrine": "@dev",
-	    "kdyby/annotations": "@dev",
-	    "kdyby/doctrine-cache": "@dev",
+		"kdyby/facebook" : "~1.2",
+	    "kdyby/doctrine": "~2.1",
+	    "kdyby/annotations": "~2.1",
+	    "kdyby/doctrine-cache": "~2.2",
 		"olicek/google-map-api": "dev-master"
 	},
 	"require-dev": {

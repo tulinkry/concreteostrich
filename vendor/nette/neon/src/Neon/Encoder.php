@@ -37,7 +37,8 @@ class Encoder
 		}
 
 		if (is_object($var)) {
-			$obj = $var; $var = array();
+			$obj = $var;
+			$var = array();
 			foreach ($obj as $k => $v) {
 				$var[$k] = $v;
 			}
@@ -77,7 +78,7 @@ class Encoder
 			return strpos($var, '.') === FALSE ? $var . '.0' : $var;
 
 		} else {
-			return json_encode($var);
+			return json_encode($var, PHP_VERSION_ID >= 50400 ? JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES : 0);
 		}
 	}
 

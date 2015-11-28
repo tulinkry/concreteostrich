@@ -7,9 +7,9 @@
 
 namespace Nette;
 
-use Nette,
-	Nette\DI,
-	Tracy;
+use Nette;
+use Nette\DI;
+use Tracy;
 
 
 /**
@@ -31,7 +31,7 @@ class Configurator extends Object
 
 	const COOKIE_SECRET = 'nette-debug';
 
-	/** @var array of function(Configurator $sender, DI\Compiler $compiler); Occurs after the compiler is created */
+	/** @var callable[]  function (Configurator $sender, DI\Compiler $compiler); Occurs after the compiler is created */
 	public $onCompile;
 
 	/** @var array */
@@ -53,7 +53,6 @@ class Configurator extends Object
 	public function __construct()
 	{
 		$this->parameters = $this->getDefaultParameters();
-		Nette\Bridges\Framework\TracyBridge::initialize();
 	}
 
 
@@ -64,7 +63,12 @@ class Configurator extends Object
 	 */
 	public function setDebugMode($value)
 	{
-		$this->parameters['debugMode'] = is_string($value) || is_array($value) ? static::detectDebugMode($value) : (bool) $value;
+		if (is_string($value) || is_array($value)) {
+			$value = static::detectDebugMode($value);
+		} elseif (!is_bool($value)) {
+			throw new Nette\InvalidArgumentException(sprintf('Value must be either a string, array, or boolean, %s given.', gettype($value)));
+		}
+		$this->parameters['debugMode'] = $value;
 		$this->parameters['productionMode'] = !$this->parameters['debugMode']; // compatibility
 		return $this;
 	}
@@ -120,7 +124,7 @@ class Configurator extends Object
 			'container' => array(
 				'class' => 'SystemContainer',
 				'parent' => 'Nette\DI\Container',
-			)
+			),
 		);
 	}
 
@@ -134,6 +138,7 @@ class Configurator extends Object
 	{
 		Tracy\Debugger::$strictMode = TRUE;
 		Tracy\Debugger::enable(!$this->parameters['debugMode'], $logDirectory, $email);
+		Nette\Bridges\Framework\TracyBridge::initialize();
 	}
 
 
@@ -166,7 +171,8 @@ class Configurator extends Object
 				$loader->load($file, $this->parameters['environment']);
 				trigger_error("Config file '$file' has sections, call addConfig() with second parameter Configurator::AUTO.", E_USER_WARNING);
 				$section = $this->parameters['environment'];
-			} catch (\Exception $e) {}
+			} catch (\Exception $e) {
+			}
 		}
 		$this->files[] = array($file, $section === self::AUTO ? $this->parameters['environment'] : $section);
 		return $this;
@@ -204,7 +210,7 @@ class Configurator extends Object
 		}
 
 		$me = $this;
-		$factory->onCompile[] = function(DI\ContainerFactory $factory, DI\Compiler $compiler, $config) use ($me) {
+		$factory->onCompile[] = function (DI\ContainerFactory $factory, DI\Compiler $compiler, $config) use ($me) {
 			foreach ($me->defaultExtensions as $name => $class) {
 				if (class_exists($class)) {
 					$compiler->addExtension($name, new $class);

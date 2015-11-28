@@ -18,6 +18,7 @@ use Nette;
 class Helpers
 {
 	const PHP_IDENT = '[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*';
+	const MAX_DEPTH = 50;
 
 
 	/**
@@ -67,7 +68,7 @@ class Helpers
 			if (empty($var)) {
 				$out = '';
 
-			} elseif ($level > 50 || isset($var[$marker])) {
+			} elseif ($level > self::MAX_DEPTH || isset($var[$marker])) {
 				throw new Nette\InvalidArgumentException('Nesting level too deep or recursive dependency.');
 
 			} else {
@@ -97,7 +98,7 @@ class Helpers
 			$class = get_class($var);
 
 			static $list = array();
-			if ($level > 50 || in_array($var, $list, TRUE)) {
+			if ($level > self::MAX_DEPTH || in_array($var, $list, TRUE)) {
 				throw new Nette\InvalidArgumentException('Nesting level too deep or recursive dependency.');
 
 			} else {
@@ -110,7 +111,7 @@ class Helpers
 				}
 				foreach ($arr as $k => & $v) {
 					if (!isset($props) || isset($props[$k])) {
-						$out .= "$space\t" . self::_dump($k, $level + 1) . " => " . self::_dump($v, $level + 1) . ",\n";
+						$out .= "$space\t" . self::_dump($k, $level + 1) . ' => ' . self::_dump($v, $level + 1) . ",\n";
 					}
 				}
 				array_pop($list);
@@ -178,7 +179,7 @@ class Helpers
 	{
 		return $name instanceof PhpLiteral || !self::isIdentifier($name)
 			? '{' . self::_dump($name) . '}'
-			: $name ;
+			: $name;
 	}
 
 

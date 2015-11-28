@@ -33,7 +33,7 @@ class Callback
 
 		self::check($callable, TRUE);
 		$_callable_ = $callable;
-		return function() use ($_callable_) {
+		return function () use ($_callable_) {
 			Callback::check($_callable_);
 			return call_user_func_array($_callable_, func_get_args());
 		};
@@ -69,7 +69,7 @@ class Callback
 	 */
 	public static function invokeSafe($function, array $args, $onError)
 	{
-		$prev = set_error_handler(function($severity, $message, $file) use ($onError, & $prev) {
+		$prev = set_error_handler(function ($severity, $message, $file) use ($onError, & $prev) {
 			if ($file === __FILE__ && $onError($message, $severity) !== FALSE) {
 				return;
 			} elseif ($prev) {
@@ -125,7 +125,7 @@ class Callback
 
 
 	/**
-	 * @return Nette\Reflection\GlobalFunction|Nette\Reflection\Method
+	 * @return \ReflectionMethod|\ReflectionFunction
 	 */
 	public static function toReflection($callable)
 	{
@@ -156,7 +156,6 @@ class Callback
 	{
 		return is_array($callable) ? is_string($callable[0]) : is_string($callable);
 	}
-
 
 
 	/**
